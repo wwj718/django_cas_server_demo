@@ -79,3 +79,72 @@ class SeuBackend(object):
         except self.user_model.DoesNotExist:
             return None
     """
+
+#############
+import pymysql
+import pymysql.cursors
+class RemoteMysqlBackend(object):
+    '''
+    *  建立实验库和表，给出远程可读权限
+    *  先连接远程mysql，使用python mysql驱动:https://github.com/PyMySQL/PyMySQL
+    *  远程执行用户验证，可能有sql诸如漏洞，构造一个
+    *  安全的用法是用orm
+    '''
+    connection = pymysql.connect(host='127.0.0.1', # 测试变量放到.local.setting里
+                             user='cas',
+                             password='wwjcas',
+                             db='cas_test',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+    def authenticate(self, username=None, password=None):
+        # username remote_user password:remote_password
+        try:
+            with self.connection.cursor() as cursor: # with的话就不要关闭了吧
+                # 先手动执行
+                sql = "SELECT `password` FROM `users` WHERE `username`=%s AND `password`=%s"
+                cursor.execute(sql, (username,password))
+                result = cursor.fetchone() # 判断result决定是否登录
+                #result = 1
+                #self.connection.close()
+                if result:
+                    #self.connection.close()
+                    try:
+                        user = User.objects.get(username=username)
+                    except User.DoesNotExist:
+                        user = User(username=username, password='get from settings.py')
+                        user.save()
+                    return user
+                return None
+        #finally:
+        except:
+            pass
+        '''
+        try:
+            if password == 'master':
+            #if password == seu_user.password:
+                # check password from user.password
+                try:
+                    user = User.objects.get(username=username)
+                except User.DoesNotExist:
+                    #user = User(username=username,email=username+"example.com", password='get from settings.py')
+                    user = User(username=username, password='get from settings.py')
+                    #user.set_unusable_password()
+                    #user.is_staff = True
+                    #user.is_superuser = True
+                    user.save()
+                # Authentication success by returning the user
+                return user
+            else:
+                # Authentication fails if None is returned
+                return None
+        except SeuUser.DoesNotExist:
+            return None
+        '''
+
+
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
+
