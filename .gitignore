@@ -3,6 +3,9 @@
 .AppleDouble
 .LSOverride
 
+# env
+env/
+
 ### SublimeText ###
 # cache files for sublime text
 *.tmlanguage.cache
