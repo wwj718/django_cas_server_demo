@@ -6,7 +6,7 @@ For more information visit https://docs.djangoproject.com/en/dev/topics/auth/cus
 #from django.conf import settings
 #from django.contrib.auth.models import User, check_password
 from auth_backends.models import  SeuUser
-
+from django.contrib.auth.models import User
 class SeuBackend(object):
     '''
     from django.contrib.auth import authenticate
@@ -22,12 +22,20 @@ class SeuBackend(object):
     '''
     def authenticate(self, username=None, password=None):
         try:
-            user = SeuUser.objects.get(username=username)
-            return user
+            seu_user = SeuUser.objects.get(username=username)
 
             if password == 'master':
-            #if password == user.password:
+            #if password == seu_user.password:
                 # check password from user.password
+                try:
+                    user = User.objects.get(username=username)
+                except User.DoesNotExist:
+                    #user = User(username=username,email=username+"example.com", password='get from settings.py')
+                    user = User(username=username, password='get from settings.py')
+                    #user.set_unusable_password()
+                    #user.is_staff = True
+                    #user.is_superuser = True
+                    user.save()
                 # Authentication success by returning the user
                 return user
             else:
@@ -38,8 +46,8 @@ class SeuBackend(object):
 
     def get_user(self, user_id):
         try:
-            return SeuUser.objects.get(pk=user_id)
-        except SeuUser.DoesNotExist:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
             return None
     """
     Authenticate against the settings ADMIN_LOGIN and ADMIN_PASSWORD.

@@ -35,11 +35,15 @@ cas 中存在一种需求，后端可能街道既有的数据库中或其他既�
 *  有时候会报错：user属性不够:诸如is_active，是其他部分依赖吗，中间件，那么认证后端怎么办，返回的user属性必须足够丰富啊，否则user不合格
     *  cas依赖那些属性
     *  需要继承user吗,继承后如何更改密码策略,自己实现密码检验？
+    *  或者在这里验证，但是用户表用来提供user模型 //参考setting user的做法：https://docs.djangoproject.com/en/dev/topics/auth/customizing/
+    
 # 意外收获
 ### 定制用户相关问题
 *  https://docs.djangoproject.com/en/dev/topics/auth/customizing/
 ### 密码机制
 *  http://tech.marksblogg.com/passwords-in-django.html
+### ack
+ack "allauth" --ignore-dir=env
 
 
 # 附

@@ -21,7 +21,7 @@ env = environ.Env()
 # ------------------------------------------------------------------------------
 DJANGO_APPS = (
     # Default Django apps:
-    'django.contrib.auth',
+    'django.contrib.auth', # 本该创建Creating table auth_user的
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -36,14 +36,14 @@ DJANGO_APPS = (
 )
 THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts
-    'allauth',  # registration
-    'allauth.account',  # registration
-    'allauth.socialaccount',  # registration
+    #'allauth',  # registration
+    #'allauth.account',  # registration
+    #'allauth.socialaccount',  # registration
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    'cas_test.users',  # custom users app
+    #'cas_test.users',  # custom users app # 不要使用alauth的user机制
     # Your stuff: custom apps go here
     'mama_cas',
 )
@@ -214,7 +214,7 @@ AUTHENTICATION_BACKENDS = (
     # add by wwj
     'auth_backends.backends.SeuBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    #'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 # Some really nice defaults
@@ -223,14 +223,14 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_ALLOW_REGISTRATION = env.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION', True)
-ACCOUNT_ADAPTER = 'cas_test.users.adapters.AccountAdapter'
-SOCIALACCOUNT_ADAPTER = 'cas_test.users.adapters.SocialAccountAdapter'
+#ACCOUNT_ADAPTER = 'cas_test.users.adapters.AccountAdapter'
+#SOCIALACCOUNT_ADAPTER = 'cas_test.users.adapters.SocialAccountAdapter'
 
 # Custom user app defaults
 # Select the correct user model
-AUTH_USER_MODEL = 'users.User'
-LOGIN_REDIRECT_URL = 'users:redirect'
-LOGIN_URL = 'account_login'
+#AUTH_USER_MODEL = 'account.User'
+#LOGIN_REDIRECT_URL = 'users:redirect'
+#LOGIN_URL = 'account_login'
 
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
